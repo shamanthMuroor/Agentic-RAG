@@ -1,0 +1,8 @@
+.venv/
+.env
+chroma_db/
+memory.db
+__pycache__/
+*.gguf
+mlruns/
+agentic_rag_engineering_roadmap.md

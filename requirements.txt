@@ -1,0 +1,13 @@
+langgraph
+langchain-core
+langchain-openai
+langchain-chroma
+langchain-huggingface
+langchain-community
+sentence-transformers
+chromadb
+ddgs
+streamlit
+pydantic
+pydantic-settings
+python-dotenv
