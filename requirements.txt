@@ -11,3 +11,4 @@ streamlit
 pydantic
 pydantic-settings
 python-dotenv
+requests
