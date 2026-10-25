@@ -5,6 +5,7 @@ langchain-chroma
 langchain-huggingface
 langchain-community
 sentence-transformers
+langchain-text-splitters
 chromadb
 ddgs
 streamlit
