@@ -1,6 +1,7 @@
 from functools import lru_cache
 from src.config import settings   # must be imported first: hides CUDA before torch loads
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
 
 COLLECTION = "knowledge_base"
 
@@ -10,6 +11,14 @@ def get_embedder() -> HuggingFaceEmbeddings:
         model_name=settings.embed_model,
         model_kwargs={"device": "cpu"},
         encode_kwargs={"normalize_embeddings": True},
+    )
+
+def get_vectorstore() -> Chroma:
+    return Chroma(
+        collection_name=COLLECTION,
+        embedding_function=get_embedder(),
+        persist_directory=settings.chroma_dir,
+        collection_metadata={"hnsw:space": "cosine"},
     )
 
 if __name__ == "__main__":
