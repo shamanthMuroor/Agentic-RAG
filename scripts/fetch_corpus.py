@@ -14,7 +14,7 @@ TITLES = [
     "Vector database", "Edge computing", "Machine learning",
 ]
 API = "https://en.wikipedia.org/w/api.php"
-HEADERS = {"User-Agent": "local-agentic-rag/0.1 (portfolio project; contact: birele1270@moblha.com)"}
+HEADERS = {"User-Agent": "local-agentic-rag/0.1 (rag project; contact: birele1270@moblha.com)"}
 
 def slug(t: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", t.lower()).strip("_")
