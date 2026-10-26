@@ -15,3 +15,8 @@ if __name__ == "__main__":
         flat = doc.page_content.replace("\n", " ")
         print(f"[{sim:.3f}] {doc.metadata['chunk_id']}")
         print("   ", flat[:200], "...\n")
+
+
+# python -m src.retrieval
+# python -m src.retrieval How do control charts detect process variation?
+# python -m src.retrieval Who won the football world cup?
