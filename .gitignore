@@ -8,3 +8,4 @@ mlruns/
 agentic_rag_engineering_roadmap.md
 .agents/skills
 data/docs/
+.pytest_cache/

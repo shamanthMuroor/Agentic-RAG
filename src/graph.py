@@ -1,8 +1,10 @@
 from typing import Annotated, Sequence, TypedDict
-from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage, ToolMessage
 from langgraph.graph.message import add_messages
 from src.llm_router import get_llm
 from src.tools import TOOLS
+
+MAX_TOOL_ITERATIONS = 3
 
 SYSTEM_PROMPT = (
     "You are an assistant for industrial AI questions. "
@@ -18,9 +20,32 @@ class AgentState(TypedDict):
     tool_calls_count: int
 
 def call_model(state: AgentState) -> dict:
-    llm = get_llm().bind_tools(TOOLS)
+    llm = get_llm()
+    if state["tool_calls_count"] < MAX_TOOL_ITERATIONS:
+        llm = llm.bind_tools(TOOLS)
     response = llm.invoke([SystemMessage(content=SYSTEM_PROMPT), *state["messages"]])
     return {"messages": [response]}
+
+TOOLS_BY_NAME = {t.name: t for t in TOOLS}
+
+def execute_tools(state: AgentState) -> dict:
+    last = state["messages"][-1]
+    results = []
+    for call in last.tool_calls:
+        try:
+            content = TOOLS_BY_NAME[call["name"]].invoke(call["args"])
+        except Exception as e:
+            content = f"Tool error: {type(e).__name__}: {e}"
+        results.append(
+            ToolMessage(content=content, name=call["name"], tool_call_id=call["id"])
+        )
+    return {"messages": results, "tool_calls_count": state["tool_calls_count"] + 1}
+
+def should_continue(state: AgentState) -> str:
+    last = state["messages"][-1]
+    if last.tool_calls and state["tool_calls_count"] < MAX_TOOL_ITERATIONS:
+        return "tools"
+    return "end"
 
 if __name__ == "__main__":
     questions = [
