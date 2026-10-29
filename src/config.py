@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
     openrouter_api_key: str = ""
     cloud_base_url: str = "https://api.groq.com/openai/v1"
-    cloud_model: str = "llama-3.3-70b-versatile"
+    cloud_model: str = "openai/gpt-oss-120b"
     embed_model: str = "BAAI/bge-small-en-v1.5"
     chroma_dir: str = "./chroma_db"
 

@@ -6,14 +6,29 @@ st.set_page_config(page_title="AI Assistant", page_icon="🏭")
 st.title("AI Assistant")
 st.caption("Agentic RAG: local knowledge base + live web search")
 
+def tool_trace(messages) -> list[dict]:
+    args_by_id = {}
+    for m in messages:
+        for call in getattr(m, "tool_calls", None) or []:
+            args_by_id[call["id"]] = call["args"]
+    return [
+        {"tool": m.name, "args": args_by_id.get(m.tool_call_id, {}), "result": m.content}
+        for m in messages
+        if m.type == "tool"
+    ]
+
+def show_trace(trace: list[dict]) -> None:
+    for t in trace:
+        with st.expander(f"🔧 {t['tool']}  {t['args']}"):
+            st.text(t["result"][:3000])
+
 if "history" not in st.session_state:
     st.session_state.history = []
 
-for role, text, tools in st.session_state.history:
+for role, text, trace in st.session_state.history:
     with st.chat_message(role):
         st.write(text)
-        if tools:
-            st.caption("Tools used: " + ", ".join(tools))
+        show_trace(trace)
 
 if question := st.chat_input("Ask about nerd stuff..."):
     with st.chat_message("user"):
@@ -24,12 +39,9 @@ if question := st.chat_input("Ask about nerd stuff..."):
                 {"messages": [HumanMessage(content=question)], "tool_calls_count": 0}
             )
         answer = result["messages"][-1].content
-        tools = [m.name for m in result["messages"] if m.type == "tool"]
+        trace = tool_trace(result["messages"])
         st.write(answer)
-        if tools:
-            st.caption("Tools used: " + ", ".join(tools))
+        show_trace(trace)
     st.session_state.history.append(("user", question, []))
-    st.session_state.history.append(("assistant", answer, tools))
-
-
+    st.session_state.history.append(("assistant", answer, trace))
 
