@@ -1,10 +1,11 @@
 import sys
 from typing import Annotated, Sequence, TypedDict
-from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage, ToolMessage
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage, ToolMessage
 from langgraph.graph.message import add_messages
 from langgraph.graph import END, START, StateGraph
 from src.llm_router import get_llm
 from src.tools import TOOLS
+from datetime import date
 
 MAX_TOOL_ITERATIONS = 3
 
@@ -14,19 +15,56 @@ SYSTEM_PROMPT = (
     "maintenance, quality control, MLOps, RAG and LLMs. "
     "Use live_web_search for current or recent information. "
     "Answer simple questions such as greetings or arithmetic directly, "
-    "without using a tool."
+    "without using a tool. "
+    "When you use tool results, base your answer only on them. If they do not "
+    "contain the answer, say so plainly instead of answering from memory. "
+    "Name the source (chunk id or URL) for key claims."
 )
 
 class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], add_messages]
     tool_calls_count: int
 
+RETRY_HINT = (
+    "Your previous tool call was invalid and was rejected. Each tool takes one "
+    "required argument: search_knowledge_base(query: string) and "
+    "live_web_search(query: string). Call a tool again with a valid 'query' "
+    "string, or answer directly if no tool is needed."
+)
+
+def _tool_failure(e: Exception) -> bool:
+    return "tool_use_failed" in str(e)
+
+def system_prompt() -> str:
+    return f"{SYSTEM_PROMPT} Today's date is {date.today():%B %d, %Y}."
+
 def call_model(state: AgentState) -> dict:
     llm = get_llm()
     if state["tool_calls_count"] < MAX_TOOL_ITERATIONS:
         llm = llm.bind_tools(TOOLS)
-    response = llm.invoke([SystemMessage(content=SYSTEM_PROMPT), *state["messages"]])
-    return {"messages": [response]}
+    messages = [SystemMessage(content=system_prompt()), *state["messages"]]
+    attempts = [messages, [*messages, HumanMessage(content=RETRY_HINT)]]
+    for i, msgs in enumerate(attempts):
+        try:
+            return {"messages": [llm.invoke(msgs)]}
+        except Exception as e:
+            if not _tool_failure(e):
+                raise
+            print(f"[warn] provider rejected the tool call (attempt {i + 1})")
+    # using this, bcz cloud gpt-oss120b is crashing as it tries to call tool
+    try:
+        final = get_llm().invoke([
+            *messages,
+            HumanMessage(content="Do not call any tools. Answer now using only "
+                                 "the information already in this conversation."),
+        ])
+        return {"messages": [final]}
+    except Exception as e:
+        if not _tool_failure(e):
+            raise
+        return {"messages": [AIMessage(
+            content="Sorry, the model could not produce a valid answer for this "
+                    "request. Please try rephrasing the question.")]}
 
 TOOLS_BY_NAME = {t.name: t for t in TOOLS}
 
