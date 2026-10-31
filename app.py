@@ -1,6 +1,13 @@
 import streamlit as st
 from langchain_core.messages import HumanMessage
 from src.graph import app_graph
+from src.ingest import ensure_index
+
+@st.cache_resource(show_spinner="Building the knowledge index (first start only)...")
+def prepare() -> bool:
+    return ensure_index()
+
+prepare()
 
 st.set_page_config(page_title="AI Assistant", page_icon="🏭")
 st.title("AI Assistant")

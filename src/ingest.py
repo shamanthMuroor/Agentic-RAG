@@ -16,5 +16,14 @@ def ingest(doc_ids: list[str]) -> None:
         print(f"{doc_id}: {len(chunks)} chunks added")
     print("Total chunks in index:", len(store.get()["ids"]))
 
+def ensure_index() -> bool:
+    """Build the index if it is missing or empty. Returns True if it had to build."""
+    if not DOC_IDS:
+        raise RuntimeError("data/docs is empty, so there is nothing to index")
+    if get_vectorstore().get(limit=1)["ids"]:
+        return False
+    ingest(DOC_IDS)
+    return True
+
 if __name__ == "__main__":
     ingest(DOC_IDS)
