@@ -13,9 +13,11 @@ class KBQuery(BaseModel):
 
 @tool("search_knowledge_base", args_schema=KBQuery)
 def search_knowledge_base(query: str) -> str:
-    """Search the local knowledge base of documents on industrial AI, predictive
-    maintenance, quality control, MLOps, RAG and LLMs. Use for conceptual or
-    definitional questions covered by those topics."""
+    """Search the local knowledge base. It covers: predictive maintenance, condition
+    monitoring, anomaly detection, statistical process control, OEE (overall equipment
+    effectiveness), Industry 4.0, smart manufacturing, digital twins, automated optical
+    inspection, computer vision, edge computing, machine learning, MLOps, RAG, large
+    language models and vector databases. Use it for any question about these topics."""
     hits = [(d, s) for d, s in retrieve(query, k=3) if s >= MIN_SIMILARITY]
     if not hits:
         return "No relevant documents found in the knowledge base."

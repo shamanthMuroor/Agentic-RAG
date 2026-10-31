@@ -14,5 +14,6 @@ class Settings(BaseSettings):
     cloud_model: str = "openai/gpt-oss-120b"
     embed_model: str = "BAAI/bge-small-en-v1.5"
     chroma_dir: str = "./chroma_db"
+    cloud_max_tokens: int = 700
 
 settings = Settings()

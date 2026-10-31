@@ -27,7 +27,7 @@ def get_llm(temperature: float = 0.0, max_tokens: int | None = None) -> ChatOpen
             api_key=key,
             model=settings.cloud_model,
             temperature=temperature,
-            max_tokens=max_tokens,
+            max_tokens=max_tokens or settings.cloud_max_tokens,
             timeout=60,
             max_retries=2,
         )

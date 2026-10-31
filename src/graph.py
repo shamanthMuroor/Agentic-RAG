@@ -11,14 +11,17 @@ MAX_TOOL_ITERATIONS = 3
 
 SYSTEM_PROMPT = (
     "You are an assistant for industrial AI questions. "
-    "Use search_knowledge_base for concepts about industrial AI, predictive "
-    "maintenance, quality control, MLOps, RAG and LLMs. "
+    "For any question about predictive maintenance, condition monitoring, anomaly "
+    "detection, statistical process control, OEE, Industry 4.0, smart manufacturing, "
+    "digital twins, optical inspection, computer vision, edge computing, machine "
+    "learning, MLOps, RAG, LLMs or vector databases, ALWAYS call search_knowledge_base "
+    "first, even if you think you already know the answer, and answer from its results. "
     "Use live_web_search for current or recent information. "
-    "Answer simple questions such as greetings or arithmetic directly, "
-    "without using a tool. "
-    "When you use tool results, base your answer only on them. If they do not "
-    "contain the answer, say so plainly instead of answering from memory. "
-    "Name the source (chunk id or URL) for key claims."
+    "Answer simple questions such as greetings or arithmetic directly, without a tool. "
+    "When you use tool results, base your answer only on them. If they do not contain "
+    "the answer, say so plainly instead of answering from memory. "
+    "Name the source (chunk id or URL) for key claims. "
+    "Be concise: at most 200 words."
 )
 
 class AgentState(TypedDict):
@@ -50,8 +53,7 @@ def call_model(state: AgentState) -> dict:
         except Exception as e:
             if not _tool_failure(e):
                 raise
-            print(f"[warn] provider rejected the tool call (attempt {i + 1})")
-    # using this, bcz cloud gpt-oss120b is crashing as it tries to call tool
+            print(f"[warn] provider rejected the tool call (attempt {i + 1}): {str(e)[-350:]}")
     try:
         final = get_llm().invoke([
             *messages,
