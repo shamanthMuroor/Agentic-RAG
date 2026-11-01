@@ -2,6 +2,8 @@ import streamlit as st
 from langchain_core.messages import HumanMessage
 from src.graph import app_graph
 from src.ingest import ensure_index
+import logging
+from openai import RateLimitError
 
 @st.cache_resource(show_spinner="Building the knowledge index (first start only)...")
 def prepare() -> bool:
@@ -41,10 +43,19 @@ if question := st.chat_input("Ask about nerd stuff..."):
     with st.chat_message("user"):
         st.write(question)
     with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            result = app_graph.invoke(
-                {"messages": [HumanMessage(content=question)], "tool_calls_count": 0}
-            )
+        try:
+            with st.spinner("Thinking..."):
+                result = app_graph.invoke(
+                    {"messages": [HumanMessage(content=question)], "tool_calls_count": 0}
+                )
+        except RateLimitError:
+            st.warning("⏳ The free demo model is rate-limited right now. "
+                       "Please wait about a minute and ask again.")
+            st.stop()
+        except Exception as e:
+            logging.getLogger(__name__).exception("agent run failed")
+            st.error(f"Something went wrong ({type(e).__name__}). Please try again.")
+            st.stop()
         answer = result["messages"][-1].content
         trace = tool_trace(result["messages"])
         st.write(answer)
