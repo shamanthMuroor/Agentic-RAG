@@ -3,6 +3,7 @@ from typing import Annotated, Sequence, TypedDict
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage, ToolMessage
 from langgraph.graph.message import add_messages
 from langgraph.graph import END, START, StateGraph
+from langgraph.checkpoint.memory import MemorySaver
 from src.llm_router import get_llm
 from src.tools import TOOLS
 from datetime import date
@@ -96,16 +97,28 @@ def build_graph():
     grph.add_edge(START, "agent")
     grph.add_conditional_edges("agent", should_continue, {"tools": "tools", "end": END})
     grph.add_edge("tools", "agent")
-    return grph.compile()
+    return grph.compile(checkpointer=MemorySaver())
 
 app_graph = build_graph()
 
-def run(question: str) -> None:
+def current_turn(messages) -> list:
+    """Messages since the latest user question (hides earlier turns' tool calls)."""
+    last_human = max(i for i, m in enumerate(messages) if m.type == "human")
+    return list(messages[last_human:])
+
+def run(question: str, thread_id: str = "cli") -> None:
     result = app_graph.invoke(
-        {"messages": [HumanMessage(content=question)], "tool_calls_count": 0}
+        {"messages": [HumanMessage(content=question)], "tool_calls_count": 0},
+        config={"configurable": {"thread_id": thread_id}},
     )
-    print("TOOLS USED:", [m.name for m in result["messages"] if m.type == "tool"])
+    turn = current_turn(result["messages"])
+    print("TOOLS USED:", [m.name for m in turn if m.type == "tool"])
     print("FINAL:", result["messages"][-1].content)
+
+def chat() -> None:
+    print("Multi-turn chat. Empty line to quit.")
+    while question := input("\nyou> ").strip():
+        run(question, thread_id="cli-chat")
 
 def routing_check() -> None:
     questions = [
@@ -124,7 +137,9 @@ def routing_check() -> None:
             print(f"DIRECT {msg.content[:70]!r}  <- {q}")
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if sys.argv[1:] == ["--chat"]:
+        chat()
+    elif len(sys.argv) > 1:
         run(" ".join(sys.argv[1:]))
     else:
         routing_check()
