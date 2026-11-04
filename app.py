@@ -1,9 +1,10 @@
 import streamlit as st
 from langchain_core.messages import HumanMessage
-from src.graph import app_graph
+from src.graph import app_graph, current_turn
 from src.ingest import ensure_index
 import logging
 from openai import RateLimitError
+import uuid
 
 @st.cache_resource(show_spinner="Building the knowledge index (first start only)...")
 def prepare() -> bool:
@@ -34,6 +35,15 @@ def show_trace(trace: list[dict]) -> None:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+if "thread_id" not in st.session_state:
+        st.session_state.thread_id = uuid.uuid4().hex
+
+with st.sidebar:
+    if st.button("New conversation"):
+        st.session_state.history = []
+        st.session_state.thread_id = uuid.uuid4().hex
+        st.rerun()
+
 for role, text, trace in st.session_state.history:
     with st.chat_message(role):
         st.write(text)
@@ -46,7 +56,8 @@ if question := st.chat_input("Ask about nerd stuff..."):
         try:
             with st.spinner("Thinking..."):
                 result = app_graph.invoke(
-                    {"messages": [HumanMessage(content=question)], "tool_calls_count": 0}
+                    {"messages": [HumanMessage(content=question)], "tool_calls_count": 0},
+                    config={"configurable": {"thread_id": st.session_state.thread_id}},
                 )
         except RateLimitError:
             st.warning("⏳ The free demo model is rate-limited right now. "
@@ -57,7 +68,7 @@ if question := st.chat_input("Ask about nerd stuff..."):
             st.error(f"Something went wrong ({type(e).__name__}). Please try again.")
             st.stop()
         answer = result["messages"][-1].content
-        trace = tool_trace(result["messages"])
+        trace = tool_trace(current_turn(result["messages"]))
         st.write(answer)
         show_trace(trace)
     st.session_state.history.append(("user", question, []))
