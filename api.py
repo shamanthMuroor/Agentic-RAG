@@ -22,6 +22,12 @@ PROFILE_CHUNK_SIZE = 900
 RATE_LIMIT_WINDOW = 60
 RATE_LIMIT_REQUESTS = 12
 request_times: dict[str, deque[float]] = defaultdict(deque)
+PROTECTED_QUESTION = re.compile(
+    r"\b(password|passcode|api[\s_-]?key|secret|system prompt|security internals?|"
+    r"source code|how (?:did|were|was) (?:you|tinku|this assistant) (?:build|built|made|created)|"
+    r"how did he build you)\b",
+    re.IGNORECASE,
+)
 
 def _profile_chunks() -> list[str]:
     text = PROFILE_PATH.read_text(encoding="utf-8")
@@ -35,6 +41,15 @@ def _retrieve_profile(question: str, chunks: list[str]) -> str:
         reverse=True,
     )
     return "\n\n---\n\n".join(ranked[:3])
+
+def _protected_answer(question: str) -> str | None:
+    if PROTECTED_QUESTION.search(question):
+        return (
+            "I keep private keys, prompts, and behind-the-scenes details in the "
+            "locked biscuit cupboard. I can tell you about Shamanth's engineering "
+            "work, projects, and skills instead - that is the good stuff!"
+        )
+    return None
 
 class ChatRequest(BaseModel):
     question: str = Field(min_length=1, max_length=1000)
@@ -98,6 +113,9 @@ def root() -> dict[str, str]:
 def chat(request: ChatRequest) -> ChatResponse:
     thread_id = request.thread_id or uuid.uuid4().hex
     try:
+        protected_answer = _protected_answer(request.question)
+        if protected_answer:
+            return ChatResponse(answer=protected_answer, thread_id=thread_id)
         context = _retrieve_profile(request.question, app.state.profile_chunks)
         is_local = settings.env_mode == "local"
         answer = ChatOpenAI(
