@@ -65,13 +65,14 @@ def chat(request: ChatRequest) -> ChatResponse:
     thread_id = request.thread_id or uuid.uuid4().hex
     try:
         context = _retrieve_profile(request.question, app.state.profile_chunks)
+        is_local = settings.env_mode == "local"
         answer = ChatOpenAI(
-            base_url=settings.cloud_base_url,
-            api_key=settings.groq_api_key,
-            model=settings.cloud_model,
+            base_url=settings.local_base_url if is_local else settings.cloud_base_url,
+            api_key="lm-studio" if is_local else settings.groq_api_key,
+            model=settings.local_model if is_local else settings.cloud_model,
             temperature=0,
             max_tokens=settings.cloud_max_tokens,
-            timeout=35,
+            timeout=120 if is_local else 35,
             max_retries=1,
         ).invoke([
             SystemMessage(content=(
