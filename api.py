@@ -56,6 +56,10 @@ app.add_middleware(
 def health() -> dict[str, str]:
     return {"status": "ok"}
 
+@app.get("/")
+def root() -> dict[str, str]:
+    return {"service": "Shamanth Portfolio Assistant", "status": "ok"}
+
 @app.post("/api/chat", response_model=ChatResponse)
 def chat(request: ChatRequest) -> ChatResponse:
     thread_id = request.thread_id or uuid.uuid4().hex
