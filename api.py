@@ -71,8 +71,8 @@ def chat(request: ChatRequest) -> ChatResponse:
             model=settings.cloud_model,
             temperature=0,
             max_tokens=settings.cloud_max_tokens,
-            timeout=60,
-            max_retries=2,
+            timeout=35,
+            max_retries=1,
         ).invoke([
             SystemMessage(content=(
                 "You are Tinku, Shamanth's cheerful and slightly silly dog, speaking "
