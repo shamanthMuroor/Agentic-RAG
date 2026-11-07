@@ -42,6 +42,23 @@ python -m streamlit run app.py
 
 For local mode, start the LM Studio server on port 1234 with Qwen2.5-3B-Instruct loaded (context length 4096).
 
+## Portfolio API deployment
+
+The portfolio assistant is exposed by `api.py` as a small FastAPI service. Deploy this
+repository to Render using the included `render.yaml`, set `GROQ_API_KEY` as a secret,
+and keep `ENV_MODE=cloud`. The service builds its Chroma index from the single
+`data/docs/profile.txt` file on startup. Set the portfolio build variable
+`NEXT_PUBLIC_RAG_API_URL` to the Render service URL before deploying the static site.
+
+The static widget sends JSON `POST /api/chat` requests:
+
+```json
+{ "question": "What tech stacks does he use?" }
+```
+
+The API responds with `{ "answer": "...", "thread_id": "..." }`. `GET /health` can be
+used by the host for health checks.
+
 ## ToDo / Limitations
 
 - No conversation memory yet!

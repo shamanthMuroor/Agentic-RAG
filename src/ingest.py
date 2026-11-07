@@ -1,17 +1,29 @@
 from pathlib import Path
+from pypdf import PdfReader
 from src.chunking import split_document
 from src.store import get_vectorstore
 
 DOCS_DIR = Path("data/docs")
-DOC_IDS = sorted(p.stem for p in DOCS_DIR.glob("*.md"))
+DOC_PATHS = sorted((*DOCS_DIR.glob("*.txt"), *DOCS_DIR.glob("*.pdf")))
+DOC_IDS = [p.stem for p in DOC_PATHS]
+
+def read_document(path: Path) -> str:
+    if path.suffix.lower() == ".pdf":
+        return "\n".join(page.extract_text() or "" for page in PdfReader(path).pages)
+    return path.read_text(encoding="utf-8")
 
 def ingest(doc_ids: list[str]) -> None:
     store = get_vectorstore()
+    existing_ids = store.get()["ids"]
+    if existing_ids:
+        store.delete(ids=existing_ids)
     for doc_id in doc_ids:
-        text = (DOCS_DIR / f"{doc_id}.md").read_text(encoding="utf-8")
+        path = next((p for p in DOC_PATHS if p.stem == doc_id), None)
+        if path is None:
+            raise FileNotFoundError(f"No profile document found for {doc_id}")
+        text = read_document(path)
         chunks = split_document(doc_id, text)
         ids = [c.metadata["chunk_id"] for c in chunks]
-        store.delete(where={"doc_id": doc_id})
         store.add_documents(chunks, ids=ids)
         print(f"{doc_id}: {len(chunks)} chunks added")
     print("Total chunks in index:", len(store.get()["ids"]))
