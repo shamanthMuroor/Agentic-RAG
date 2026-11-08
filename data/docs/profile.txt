@@ -1,18 +1,38 @@
-Shamanth Muroor is an Embedded Software Engineer and Systems Software Engineer based in 71229 Stuttgart, Germany. He is pursuing an M.Sc. in Automotive Software Engineering at TU Chemnitz and is completing a full-time master's thesis at CARIAD SE.
+Shamanth Muroor is an Software Engineer specializing in Embedded systems and AI.
+Based in 71229 Leonberg (Stuttgart), Germany. 
+He is pursuing an M.Sc. in Automotive Software Engineering at TU Chemnitz and is completing a full-time master's thesis at CARIAD SE.
+Hometown: Mangaluru, India.
+Loves Beaches, his hometown is also near to beaches.
+Likes watching F1 races.
+
+He is currently looking for full-time jobs starting from January 2027 in software engineering with embedded systems and AI specialization.
+He is even ready for an internship for couple of months before full-time from December 2026.
 
 Current work:
 - At CARIAD SE, he designs a multi-MCU platform using MATLAB/Simulink and FreeRTOS, integrates C/C++ middleware across two ARM Cortex-M microcontrollers, and develops model-driven control algorithms.
-- He previously worked as a Systems Engineer Intern at Porsche AG, where he built a JavaScript control-system evaluation application used by more than 500 engineers, validated control-unit data across three HiL variants, and designed automated testing.
-- He previously worked as a Software Engineer at Epsilon Data Management in Bengaluru, developing a real-time Java microservice handling about 100,000 requests per day, AWS/Terraform/Docker/Python infrastructure, UI/UX, and test automation reaching 94% coverage.
+- He previously worked as a Systems Engineer at Porsche AG, where he built a JavaScript diagnostics application used by more than 500 engineers, validated control-unit data across three HiL variants, and designed automated testing.
+- He previously worked as a Software Engineer at Epsilon Data Management in Bengaluru, developing a real-time Python/Java microservices, AWS/Terraform/Docker/Python infrastructure, UI/UX, DevOps CI/CD, and test automation reaching 94% coverage.
 
 Technical skills:
-C, C++, Python, Java, JavaScript, PowerShell, MATLAB/Simulink, FreeRTOS, ARM Cortex-M, AUTOSAR, embedded systems, Node.js, ElectronJS, Angular, TypeScript, AWS, Terraform, Docker, Linux, Git, and Agile/Scrum. He also works with RAG, LLMs, ChromaDB, LangChain, LangGraph, FastAPI, and Streamlit.
+C, Python, Java, AWS, FreeRTOS, ARM Cortex-M, Git, Docker, embedded systems, Node.js, JavaScript, ElectronJS, Angular, TypeScript, Terraform, MATLAB/Simulink, and Agile/Scrum. 
+He also works with AI, RAG, LLMs, Copilot, ChromaDB, LangChain, LangGraph, FastAPI, and Streamlit.
+He knows Linux, Windows, and FreeRTOS operating systems and kernels. 
 
 Education and languages:
-He holds a Master of Computer Applications from RV College of Engineering and is studying at TU Chemnitz. He speaks English (C1) and German (A2).
+He is studying Master's in M.Sc. Automotive Software Engineering (Informatik) at TU Chemnitz. 
+He has done his bachelor's in B.Sc. Computer Science, Physics, and Mathematics at St. Aloysius College, Mangaluru in India.
+
+languages
+He speaks fluent English (C1).
+He is learning German (B1).
+His mother tongue is Kannada.
+He speaks a vulnerable language called as Tulu.
+He also speaks Hindi fluently.
 
 Work authorization:
-Shamanth's current work authorization or visa status has not been provided in this profile. Do not guess it.
+Shamanth's current work authorization and visa status is that he is eligible for Blue Card.
+Further deeper questions you can also add his current visa is valid till April 2027 which he will renew soon.
 
 Work style:
-His documented experience includes delivering production software, test automation, validation, cross-team collaboration, and measurable improvements. The profile does not make an absolute promise about completing every task on time; answer with this nuance.
+His documented experience includes delivering production software, test automation, validation, cross-team collaboration, and measurable improvements.
+Love to work with teams and learn new items and tech stacks.
