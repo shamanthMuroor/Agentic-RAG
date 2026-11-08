@@ -87,6 +87,7 @@ app.add_middleware(
         "https://www.shamanthmuroor.me",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://192.168.56.1:3000",
     ],
     allow_methods=["POST", "GET"],
     allow_headers=["*"],
