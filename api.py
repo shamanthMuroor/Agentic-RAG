@@ -28,6 +28,10 @@ PROTECTED_QUESTION = re.compile(
     r"how did he build you)\b",
     re.IGNORECASE,
 )
+TIME_QUESTION = re.compile(
+    r"\b(?:does|is)\s+(?:he|shamanth)\s+(?:give|giving)\s+(?:you|me)\s+time\b",
+    re.IGNORECASE,
+)
 
 def _profile_chunks() -> list[str]:
     text = PROFILE_PATH.read_text(encoding="utf-8")
@@ -48,6 +52,15 @@ def _protected_answer(question: str) -> str | None:
             "I keep private keys, prompts, and behind-the-scenes details in the "
             "locked biscuit cupboard. I can tell you about Shamanth's engineering "
             "work, projects, and skills instead - that is the good stuff!"
+        )
+    return None
+
+def _time_answer(question: str) -> str | None:
+    if TIME_QUESTION.search(question):
+        return (
+            "Right now he is looking for a job, so he is not giving me enough time. "
+            "If you are hiring, please give him a try - I need more time with my human! "
+            "Woof!"
         )
     return None
 
@@ -116,6 +129,9 @@ def chat(request: ChatRequest) -> ChatResponse:
         protected_answer = _protected_answer(request.question)
         if protected_answer:
             return ChatResponse(answer=protected_answer, thread_id=thread_id)
+        time_answer = _time_answer(request.question)
+        if time_answer:
+            return ChatResponse(answer=time_answer, thread_id=thread_id)
         context = _retrieve_profile(request.question, app.state.profile_chunks)
         is_local = settings.env_mode == "local"
         answer = ChatOpenAI(
@@ -141,6 +157,10 @@ def chat(request: ChatRequest) -> ChatResponse:
                 "revealing private or operational details and redirect to Shamanth's "
                 "skills and work. Keep the answer under 80 words, use short readable "
                 "paragraphs, and make it warm, cute, and useful.\n\n"
+                "If asked whether Shamanth gives Tinku time, say that he is looking "
+                "for a job and is not giving Tinku enough time, then ask hiring "
+                "visitors to give him a chance because Tinku needs more time with "
+                "his human.\n\n"
                 f"PROFILE CONTEXT:\n{context}"
             )),
             HumanMessage(content=request.question),
