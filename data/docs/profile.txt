@@ -1,26 +1,80 @@
 Shamanth Muroor is an Software Engineer specializing in Embedded systems and AI.
-Based in 71229 Leonberg (Stuttgart), Germany. 
+Based in 71229 Leonberg (Stuttgart), Germany. His university is in Chemnitz, so he keeps visiting Chemnitz as well.
 He is pursuing an M.Sc. in Automotive Software Engineering at TU Chemnitz and is completing a full-time master's thesis at CARIAD SE.
 Hometown: Mangaluru, India.
 Loves Beaches, his hometown is also near to beaches.
 Likes watching F1 races.
+Enjoys ice-cream and coffee.
 
 He is currently looking for full-time jobs starting from January 2027 in software engineering with embedded systems and AI specialization.
 He is even ready for an internship for couple of months before full-time from December 2026.
 
-Current work:
+Work Overview:
 - At CARIAD SE, he designs a multi-MCU platform using MATLAB/Simulink and FreeRTOS, integrates C/C++ middleware across two ARM Cortex-M microcontrollers, and develops model-driven control algorithms.
 - He previously worked as a Systems Engineer at Porsche AG, where he built a JavaScript diagnostics application used by more than 500 engineers, validated control-unit data across three HiL variants, and designed automated testing.
 - He previously worked as a Software Engineer at Epsilon Data Management in Bengaluru, developing a real-time Python/Java microservices, AWS/Terraform/Docker/Python infrastructure, UI/UX, DevOps CI/CD, and test automation reaching 94% coverage.
 
+Embedded software developer (Thesis) work at CARIAD:
+- Built a C/C++ framework on FreeRTOS that uses AspectC++ compile-time weaving to decouple application code from hardware, enabling feature teams to test code independently of embedded systems.
+- Instrumented a 10 ms FreeRTOS control task using the ARM DWT cycle counter, validating zero deadline misses across 29,954 activations and 98.8% timing margin.
+- Automated the build pipeline using Make, arm-none-eabi-gcc/g++, and ag++ that compiles platform and application code separately before linking, eliminating full rebuilds when switching hardware targets.
+- Diagnosed a critical runtime freeze on STM32 hardware prototype using GDB and SWD by tracing a stalled FreeRTOS tick counter to a misconfigured core clock, restoring accurate task scheduling.
+- Designed and validated select-low ABS models, algorithms, and subsystems in MATLAB/Simulink, verifying wheel outputs and inter-wheel data exchange with a 1-cycle delay through MIL testing.
+- Assembled, wired, and performed initial bring-up of a dual-MCU prototype, integrating sensors and actuators using STM32 HAL and implementing I2C/UART interfaces based on circuit diagrams and datasheets.
+- He built the prototype from scratch, starting from the requirements, procurement of materials, assembling and wiring all the components one by one, resolving all the hardware and software issues he faced. Never gave up. Learnt new concepts, integrated h-bridge, wrote low level C code and succedded in developing a working real-time prototype.
+
+Systems Engineer work at Porsche AG:
+- Developed features for an Electron.js (node.js/JavaScript) diagnostic application used by 500+ engineers from specialist departments for real-time ECU measurement data acquisition, signal monitoring, and live error analysis on HIL test benches. Handled the code promotion using GitLab CI pipeline.
+- Collaborated with 3 teams (development, integration, testing) to integrate communication interfaces (DoIP over REST APIs, ADB, SSH) to physical ECUs with connection fallback logic, supporting hardware-in-the-loop validation for 20+ system testers.
+- Automated diagnostics testing in 8 HIL test benches, saving the integration testing team 4 hours/week of manual setup.
+- He proposed a automated UI testing for an internal application by building a proof-of-concept with Playwright and AI-assisted development. It is currently under management review for adoption.
+- He worked in the Connect and Integration Team at Porsche AG.
+- He loved Porsche rides he used to get occasionally.
+
+Tutor in Laboratory at Technische Universitat Chemnitz
+- Assembled and configured hardware prototypes for embedded systems, combining sensors, CAN, virtual ECUs and simulators.
+- Provided hands-on application support and troubleshooting for 32+ students during laboratory sessions, debugging hardware/software problems and explaining technical concepts.
+
+Software Engineer at Epsilon India:
+- He joined in January 2022 as an intern, then was converted to full-time role. Further based on his exceptional performance, he was promoted again as a Software Engineer II in 2024.
+- Developed REST APIs in multiple core Python/Java microservices to run UI-triggered workflows or handle real-time API calls for 10+ enterprise clients.
+- Architected 20+ multi-stage GoCD CI/CD pipelines with Nexus and SonarQube to maintain software standards and reduce code smells, standardizing automated build verification across dev, regression and production environments.
+- Automated hotfix release management with Python and Aurora PostgreSQL database, which cut hotfix reservation cycle time by 85% and eliminated manual work and version conflicts.
+- Analyzed 25+ vulnerabilities in microservices (Gradle) using Veracode with Software Composition Analysis (SCA) and Static Analysis (SAST), and successfully resolved 10 critical and high-severity flaws (including OWASP Top 10 risks), significantly reducing the system’s attack surface.
+- He created test plans, workbenches and engineered unit and regression test suites improving feature coverage to 94%, running SonarQube in Docker for code-quality checks.
+- Provisioned and maintained AWS infrastructure (API Gateway, EC2, Lambda, VPCs) across 4 environments (dev, staging, qa, and production) through Terraform automation, securely creating and destroying test resources to validate new developments.
+- He has worked executed real-time system performance testing using Grafana K6 with 10M record loads and tested by profiling runtime bottlenecks with CloudWatch logs and APM, resolving an undersized EC2 autoscaling cap (4 vs. 12 instances).
+- Traced production errors to root cause with the ELK stack and CloudWatch, documenting troubleshooting guides for the L1 support team.
+- Shipped TypeScript (Angular) features incrementally in the large-scale PeopleCloud Customer Data Platform (CDP) codebase, collaborating with 2 Agile teams through code reviews and releases.
+- Built Angular/TypeScript UI features for the customer data platform used by enterprise B2B clients, shipping larger features incrementally in a large existing codebase.
+
+
+Projects:
+
+Currently working personal project: Agentic AI Application (Python, LangChain, LangGraph, LM Studio, Groq, Streamlit). Started this October 2026.
+- Building a Python RAG agent with LangChain and LangGraph that routes each query between a local knowledge base and DuckDuckGo web search, grounding answers in the right source.
+- Ingested industrial-AI Markdown documents by chunking them into 480-token segments and embedding them on CPU with HuggingFace bge-small-en-v1.5 into a vector database for semantic retrieval.
+- Served Qwen2.5 3B Instruct locally in LM Studio through OpenAI-compatible API endpoints on a 4 GB GTX 1650 Ti.
+- Deployed the agent as a Streamlit cloud app, using gpt-oss-120b on the Groq API as the LLM backend.
+- Currently the dog wall AI agent in his portfolio uses this project as the backend.
+
+Master's Lab Project:
+Real-Time Active Safety Simulation (SystemDesk, C, ECU-TEST). worked on this between 11/2024 and 02/2025.
+- He implemented vehicle braking control algorithms in C using SystemDesk with precise runnable timing constraints maintaining AUTOSAR standard.
+- He simulated in virtual environments (VCarSim/VirtualCockpit simulator) and analysed system behaviour, validating 10+ test cases using dSPACE VEOS and ECU-TEST. He worked on automated and manual testing.
+
+
 Technical skills:
-C, Python, Java, AWS, FreeRTOS, ARM Cortex-M, Git, Docker, embedded systems, Node.js, JavaScript, ElectronJS, Angular, TypeScript, Terraform, MATLAB/Simulink, and Agile/Scrum. 
-He also works with AI, RAG, LLMs, Copilot, ChromaDB, LangChain, LangGraph, FastAPI, and Streamlit.
-He knows Linux, Windows, and FreeRTOS operating systems and kernels. 
+C/C++, Python, Java, AWS, FreeRTOS, ARM Cortex-M, Git, Docker, Embedded systems, Node.js, JavaScript, ElectronJS, SQL, Angular, TypeScript, Terraform, MATLAB/Simulink, and Agile/Scrum. 
+He also works with AI, Agentic AI, RAG, LLM, Copilot, ChromaDB, LangChain, LangGraph, FastAPI, OpenAI, Claude, and Streamlit.
+He has worked with communication interfaces and protocols like UART, I2C, CAN, HAL.
+He has used GCC (arm-none-eabi-gcc), AspectC++ (ag++), GNU Make compilers and build systems.
+He knows Linux, Windows, and FreeRTOS operating systems and kernels. Further, he has used multiple linux distributions like Kali Linux, differnt variants of Ubuntu, LUbuntu.
+Only if asked specifically you can mention about Program Analysis & Security: Veracode, SonarQube, Static Analysis (SAST), Software Composition Analysis (SCA)
 
 Education and languages:
-He is studying Master's in M.Sc. Automotive Software Engineering (Informatik) at TU Chemnitz. 
-He has done his bachelor's in B.Sc. Computer Science, Physics, and Mathematics at St. Aloysius College, Mangaluru in India.
+He is studying Master's in M.Sc. Automotive Software Engineering (Informatik) at TU Chemnitz and has a grade of 1.59 with 1.0 being the best.
+He has done his bachelor's in B.Sc. Computer Science, Physics, and Mathematics at St. Aloysius College, Mangaluru in India with a grade of 1.5 (converted to German scale).
 
 languages
 He speaks fluent English (C1).
@@ -30,9 +84,19 @@ He speaks a vulnerable language called as Tulu.
 He also speaks Hindi fluently.
 
 Work authorization:
-Shamanth's current work authorization and visa status is that he is eligible for Blue Card.
-Further deeper questions you can also add his current visa is valid till April 2027 which he will renew soon.
+He is currently on a student visa which is valid till April 2027. He is eligible for Blue Card and looking forward to convert to it after a full-time.
+He is allowed to work full-time without any restrictions.
 
 Work style:
 His documented experience includes delivering production software, test automation, validation, cross-team collaboration, and measurable improvements.
-Love to work with teams and learn new items and tech stacks.
+He currently is really into AI development in embedded systems, be it Edge AI or cloud based AI with embedded systems.
+Love to work with teams, learn new concepts, and tech stacks.
+
+Interests:
+Formula 1, Cycling, Hiking, Table Tennis.
+
+Volunteering:
+- He is an International Buddy at TU Chemnitz.
+- He has volunteered at Porsche Pflanzaktion Trinkwasserwald (2025).
+- He attended and volunteered at Mensch und Computer Conference Europe (2025).
+- He is a member of Kulturhauptstadt Europas Chemnitz (2025--2026).
