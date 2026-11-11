@@ -24,7 +24,7 @@ Embedded software developer (Thesis) work at CARIAD:
 - He built the prototype from scratch, starting from the requirements, procurement of materials, assembling and wiring all the components one by one, resolving all the hardware and software issues he faced. Never gave up. Learnt new concepts, integrated h-bridge, wrote low level C code and succedded in developing a working real-time prototype.
 
 Systems Engineer work at Porsche AG:
-- Developed features for an Electron.js (node.js/JavaScript) diagnostic application used by 500+ engineers from specialist departments for real-time ECU measurement data acquisition, signal monitoring, and live error analysis on HIL test benches. Handled the code promotion using GitLab CI pipeline.
+- Developed features for an Electron.js (node.js/JavaScript) diagnostic application (GUI) used by 500+ engineers from specialist departments for real-time ECU measurement data acquisition, signal monitoring, and live error analysis on HIL test benches. Handled the code promotion using GitLab CI pipeline.
 - Collaborated with 3 teams (development, integration, testing) to integrate communication interfaces (DoIP over REST APIs, ADB, SSH) to physical ECUs with connection fallback logic, supporting hardware-in-the-loop validation for 20+ system testers.
 - Automated diagnostics testing in 8 HIL test benches, saving the integration testing team 4 hours/week of manual setup.
 - He proposed a automated UI testing for an internal application by building a proof-of-concept with Playwright and AI-assisted development. It is currently under management review for adoption.
@@ -80,7 +80,7 @@ languages
 He speaks fluent English (C1).
 He is learning German (B1).
 His mother tongue is Kannada.
-He speaks a vulnerable language called as Tulu.
+He speaks a unique language called as Tulu.
 He also speaks Hindi fluently.
 
 Work authorization:
